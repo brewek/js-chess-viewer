@@ -33,6 +33,10 @@ export class ChessBoardElement extends HTMLElement {
   private selectedSquare: string | null = null;
   private draggedPieceSquare: string | null = null;
 
+  private renderScheduled = false;
+  private squaresCreatedForOrientation: BoardOrientation | null = null;
+  private squaresCreatedForCoordinates: BoardCoordinates | null = null;
+
   static get observedAttributes() {
     return ['fen', 'orientation', 'coordinates'];
   }
@@ -48,12 +52,24 @@ export class ChessBoardElement extends HTMLElement {
     this.setupEventListeners();
   }
 
+  private scheduleRender() {
+    if (!this.renderScheduled) {
+      this.renderScheduled = true;
+      requestAnimationFrame(() => {
+        this.renderScheduled = false;
+        if (this.boardEl) {
+          this.renderBoard();
+        }
+      });
+    }
+  }
+
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (oldValue === newValue) return;
     if (name === 'fen') this._fen = newValue;
     if (name === 'orientation') this._orientation = newValue as BoardOrientation;
     if (name === 'coordinates') this._coordinates = newValue as BoardCoordinates;
-    this.renderBoard();
+    this.scheduleRender();
   }
 
   get fen() {
@@ -79,7 +95,7 @@ export class ChessBoardElement extends HTMLElement {
 
   set pieces(customPieces: PieceMap) {
     this._pieces = { ...DEFAULT_PIECES, ...customPieces };
-    this.renderBoard();
+    this.scheduleRender();
   }
 
   setHighlights(squares: string[]) {
@@ -198,9 +214,23 @@ export class ChessBoardElement extends HTMLElement {
   }
 
   private renderBoard() {
-    this.boardEl.innerHTML = '';
-    const layout = this.parseFEN(this._fen);
+    if (
+      this.squaresCreatedForOrientation !== this._orientation ||
+      this.squaresCreatedForCoordinates !== this._coordinates ||
+      this.boardEl.children.length === 0
+    ) {
+      this.createSquares();
+      this.squaresCreatedForOrientation = this._orientation;
+      this.squaresCreatedForCoordinates = this._coordinates;
+    }
 
+    this.updatePieces();
+    this.updateHighlights();
+    this.renderArrows();
+  }
+
+  private createSquares() {
+    this.boardEl.innerHTML = '';
     const files = [...FILES];
     const ranks = [...RANKS];
 
@@ -234,9 +264,27 @@ export class ChessBoardElement extends HTMLElement {
             squareEl.innerHTML += `<div class="coord file">${file}</div>`;
           }
         }
+        this.boardEl.appendChild(squareEl);
+      }
+    }
+  }
 
-        const pieceChar = layout[sq];
-        if (pieceChar && this._pieces[pieceChar]) {
+  private updatePieces() {
+    const layout = this.parseFEN(this._fen);
+    const squares = this.boardEl.querySelectorAll('.square');
+
+    squares.forEach((squareEl) => {
+      const sq = (squareEl as HTMLElement).dataset.square!;
+      const pieceChar = layout[sq];
+      const existingPieceEl = squareEl.querySelector('.piece') as HTMLElement;
+
+      if (pieceChar && this._pieces[pieceChar]) {
+        if (existingPieceEl) {
+          if (existingPieceEl.dataset.piece !== pieceChar) {
+            existingPieceEl.dataset.piece = pieceChar;
+            existingPieceEl.innerHTML = this._pieces[pieceChar];
+          }
+        } else {
           const pieceEl = document.createElement('div');
           pieceEl.className = 'piece';
           pieceEl.draggable = true;
@@ -244,12 +292,10 @@ export class ChessBoardElement extends HTMLElement {
           pieceEl.innerHTML = this._pieces[pieceChar];
           squareEl.appendChild(pieceEl);
         }
-
-        this.boardEl.appendChild(squareEl);
+      } else if (existingPieceEl) {
+        squareEl.removeChild(existingPieceEl);
       }
-    }
-    this.updateHighlights();
-    this.renderArrows();
+    });
   }
 
   private renderArrows() {
