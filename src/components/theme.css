@@ -1,0 +1,28 @@
+/* src/components/theme.css */
+:root {
+  /* Board Dimensions */
+  --board-max-size: 600px;
+
+  /* Colors */
+  --board-light: #eeeed2;
+  --board-dark: #769656;
+  --board-highlight: rgba(255, 255, 51, 0.5); /* E.g., for last move */
+  --board-selected: rgba(20, 85, 30, 0.5); /* E.g., for clicked piece */
+
+  /* Borders */
+  --board-border: 4px solid #2d2d2d;
+
+  /* Piece Sizing */
+  --piece-scale: 85%; /* Adjust depending on custom SVG padding */
+}
+
+/* Specific theme classes applied to the parent container */
+.theme-wood {
+  --board-light: #f0d9b5;
+  --board-dark: #b58863;
+}
+
+.theme-ocean {
+  --board-light: #cadced;
+  --board-dark: #4b7399;
+}
