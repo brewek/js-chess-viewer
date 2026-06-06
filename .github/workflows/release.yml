@@ -34,14 +34,11 @@ jobs:
         run: npm run build
 
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
-        with:
-          semantic_version: 21
-          extra_plugins: |
-            @semantic-release/git
-            @semantic-release/changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ''
+          NPM_TOKEN: ""
           NPM_CONFIG_PROVENANCE: true
+        run: |
+          npm install -D semantic-release @semantic-release/git @semantic-release/changelog
+          npx semantic-release
 
