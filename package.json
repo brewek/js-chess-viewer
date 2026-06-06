@@ -12,6 +12,10 @@
     },
     "./theme.css": "./src/components/theme.css"
   },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
