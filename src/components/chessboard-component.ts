@@ -134,8 +134,8 @@ export class ChessBoardElement extends HTMLElement {
         }
         .board {
           display: grid;
-          grid-template-columns: repeat(8, 1fr);
-          grid-template-rows: repeat(8, 1fr);
+          grid-template-columns: repeat(8, minmax(0, 1fr));
+          grid-template-rows: repeat(8, minmax(0, 1fr));
           width: 100%;
           height: 100%;
           border: var(--board-border, 2px solid #333);
@@ -157,6 +157,8 @@ export class ChessBoardElement extends HTMLElement {
           display: flex;
           justify-content: center;
           align-items: center;
+          min-width: 0;
+          min-height: 0;
         }
         .square.light { background-color: var(--light-sq); }
         .square.dark { background-color: var(--dark-sq); }
