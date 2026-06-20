@@ -115,7 +115,7 @@ export class ChessBoardElement extends HTMLElement {
           display: block;
           width: 100%;
           max-width: var(--board-max-size, 100%);
-          max-height: 100%;
+          max-height: var(--board-max-size, 100%);
           aspect-ratio: 1;
           user-select: none;
           position: relative;
