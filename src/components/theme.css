@@ -1,8 +1,5 @@
 /* src/components/theme.css */
 :root {
-  /* Board Dimensions */
-  --board-max-size: 600px;
-
   /* Colors */
   --board-light: #eeeed2;
   --board-dark: #769656;
