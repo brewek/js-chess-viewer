@@ -484,6 +484,9 @@ export class ChessBoardElement extends HTMLElement {
       targetSqEl.appendChild(pieceEl);
     }
 
+    this._fen = chess.fen();
+    this.setAttribute('fen', this._fen);
+
     this.dispatchEvent(
       new CustomEvent<MoveAttemptDetail>('move-attempt', {
         detail: { source, target, piece },
