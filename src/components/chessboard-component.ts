@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import { DEFAULT_PIECES } from './pieces';
 
 type PieceMap = Record<string, string>;
@@ -459,6 +460,14 @@ export class ChessBoardElement extends HTMLElement {
   }
 
   private handleMoveAttempt(source: string, target: string) {
+    const chess = new Chess(this._fen);
+    try {
+      chess.move({ from: source, to: target, promotion: 'q' });
+    } catch {
+      this.revertState();
+      return;
+    }
+
     const sourceSqEl = this.boardEl.querySelector(`[data-square="${source}"]`);
     const pieceEl = sourceSqEl?.querySelector('.piece') as HTMLElement;
 
