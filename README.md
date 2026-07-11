@@ -1,5 +1,10 @@
 # js-chess-viewer
 
+[![Status](https://img.shields.io/badge/status-archived-red.svg)](./README.md)
+
+> [!CAUTION]
+> **This project is no longer maintained.** It has been abandoned in favor of [chessground](https://github.com/lichess-org/chessground). No further updates, bug fixes, or support will be provided.
+
 A lightweight, high-performance web component for rendering and interacting with chess boards.
 
 ## Features
@@ -16,12 +21,6 @@ A lightweight, high-performance web component for rendering and interacting with
 
 <chess-board fen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"></chess-board>
 ```
-
-## Support
-
-If you found this project helpful and want to support its development, consider sponsoring me or leaving a donation!
-
-[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/marekniez)
 
 ## License
 
